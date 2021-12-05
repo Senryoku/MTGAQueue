@@ -77,7 +77,7 @@
 <script>
 import Modal from "./Modal.vue";
 
-const ServerURL = "http://senryoku.tk/";
+const ServerURL = "http://senryoku.tk:7000";
 
 export default {
 	components: { Modal },
