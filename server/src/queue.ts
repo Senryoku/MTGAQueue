@@ -45,8 +45,8 @@ export function addPlayer(player: Player, data: any) {
 	let newPlayer: QueuedPlayer = {
 		playerID: player.id,
 		created: new Date(),
-		format: Format[data.format],
-		formatStructure: FormatStructure[data.formatStructure],
+		format: Format[data.format as keyof typeof Format],
+		formatStructure: FormatStructure[data.formatStructure as keyof typeof  FormatStructure],
 	};
 
 	let candidates: Array<QueuedPlayer> = [];
