@@ -14,7 +14,7 @@ export const socket = {
 	install: function(Vue, options) {
 
 		function connectWS() {
-			const socket = new WebSocket("ws://localhost:7000");
+			const socket = new WebSocket(`ws://senryoku.tk:7000`);
 			Vue.config.globalProperties.$socket = {
 				ws: socket,
 				socketAutoReconnect: true,

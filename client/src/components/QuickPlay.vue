@@ -77,6 +77,8 @@
 <script>
 import Modal from "./Modal.vue";
 
+const ServerURL = "http://senryoku.tk/";
+
 export default {
 	components: { Modal },
 	data() {
@@ -96,12 +98,12 @@ export default {
 	},
 	inject: ["socket"],
 	mounted() {
-		fetch("http://localhost:7000/formats/")
+		fetch(`${ServerURL}/formats/`)
 			.then((data) => data.json())
 			.then((json) => {
 				this.formats = json;
 			});
-		fetch("http://localhost:7000/formats/structures")
+		fetch(`${ServerURL}/formats/structures`)
 			.then((data) => data.json())
 			.then((json) => {
 				this.formatStructures = json;
