@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1>Quick Match</h1>
-		<form @submit="queue">
+		<form @submit="queue" :class="{disabled: inQueue}">
 			<fieldset :disabled="inQueue">
 				<span class="label-container">
 					<label for="select-format">Arena Username</label>
@@ -29,9 +29,11 @@
 				<button type="submit">Queue</button>
 			</fieldset>
 		</form>
-		<div v-if="inQueue">
-			<font-awesome-icon icon="spinner" pulse /> Searching for an opponent...
-			<button @click="cancelQueue">Cancel</button>
+		<div class="status">
+			<div v-if="inQueue">
+				<font-awesome-icon icon="spinner" pulse /> Searching for an opponent...
+				<button @click="cancelQueue">Cancel</button>
+			</div>
 		</div>
 		<div>
 			<p v-for="e in errors" :key="e">{{ e }}</p>
@@ -45,17 +47,18 @@
 				</h2>
 				<button @click="match = null">Ok</button>
 			</modal>
-			<modal v-else-if="match.launched" title="Match in progess...">
+			<modal v-else-if="match.launched" title="Match Accepted!">
 				<h2>
-					<span @click="copyOpponentName">Against {{ match.playerName }}</span>
+					<span @click="copyOpponentName" class="clickable">Against {{ match.playerName }}</span>
 				</h2>
 				<div>Format: {{ match.info.format }}</div>
 				<div>Structure: {{ match.info.formatStructure }}</div>
+				<div class="instructions">Now go to MTG: Arena > Direct challenge and enter your opponent name there (you can click on it to copy it to your clipboard and paste it in Arena).</div>
 				<button class="accept-button" @click="endMatch">Done!</button>
 			</modal>
 			<modal v-else title="Match Found!">
 				<h2>
-					<span @click="copyOpponentName"
+					<span @click="copyOpponentName" class="clickable"
 						>{{ match.playerName }} wants to battle!</span
 					>
 				</h2>
@@ -76,15 +79,14 @@
 
 <script>
 import Modal from "./Modal.vue";
-
-const ServerURL = "http://senryoku.tk:7000";
+import { ServerHost } from "../config";
 
 export default {
 	components: { Modal },
 	data() {
 		return {
 			username: localStorage.getItem("mtgaqueue-username", ""),
-			format: localStorage.getItem("mtgaqueue-format", "Gladiator"),
+			format: localStorage.getItem("mtgaqueue-format", "Arena Vintage"),
 			formatStructure: localStorage.getItem(
 				"mtgaqueue-format-structure",
 				"Any"
@@ -98,12 +100,12 @@ export default {
 	},
 	inject: ["socket"],
 	mounted() {
-		fetch(`${ServerURL}/formats/`)
+		fetch(`${window.location.protocol}//${ServerHost}/formats/`)
 			.then((data) => data.json())
 			.then((json) => {
 				this.formats = json;
 			});
-		fetch(`${ServerURL}/formats/structures`)
+		fetch(`${window.location.protocol}//${ServerHost}/formats/structures`)
 			.then((data) => data.json())
 			.then((json) => {
 				this.formatStructures = json;
@@ -190,7 +192,8 @@ export default {
 			this.match = null;
 		},
 		copyOpponentName() {
-			// TODO
+			if(this.match?.playerName)
+  				navigator.clipboard.writeText(this.match.playerName);
 		},
 	},
 	watch: {
@@ -224,10 +227,23 @@ button {
 
 button:hover {
 	background-color: #fff;
+	cursor: pointer;
 }
 
 button:active {
 	background-color: #ddd;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.status {
+	min-height: 2em;
 }
 
 .label-container {
@@ -240,6 +256,7 @@ button:active {
 	left: 0;
 	font-variant: small-caps;
 	font-size: 0.8em;
+	user-select: none;
 }
 
 .decline-button,
@@ -257,5 +274,10 @@ button:active {
 .decline-button {
 	background-color: rgb(194, 141, 141);
 	border: 1px rgb(146, 65, 65) solid;
+}
+
+.instructions {
+	max-width: 70%;
+	margin:  1em auto;
 }
 </style>

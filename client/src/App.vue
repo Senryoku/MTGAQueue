@@ -1,21 +1,17 @@
 <template>
 	<div>
 		<h1>Direct Play</h1>
-		<img alt="Vue logo" src="./assets/logo.png" height="100" />
+		<img alt="MTGA Logo" src="./assets/logo.png" height="100" />
 		<quick-play />
+		<div class="footer">More information: <a href="https://discord.gg/dZeBZXh7" target="_blank"><img src="./assets/icon_clyde_blurple_RGB.svg" class="logo" /> F.I.R.E. Arena Vintage Discord server</a></div>
 	</div>
 </template>
 
 <script setup>
-import { inject, onBeforeUnmount } from "vue";
 import QuickPlay from "./components/QuickPlay.vue";
-
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
 </script>
 
 <script>
-import { reactive } from "vue";
 export default {
 	inject: ["socket"],
 };
@@ -29,5 +25,22 @@ export default {
 	text-align: center;
 	color: #2c3e50;
 	margin-top: 60px;
+}
+
+a, a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #2994ff;
+}
+
+.footer {
+	margin-top: 2em;
+}
+
+.logo {
+	height: 1em;
+	vertical-align: middle;
 }
 </style>
