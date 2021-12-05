@@ -30,7 +30,7 @@
 			</fieldset>
 		</form>
 		<div v-if="inQueue">
-			<font-awesome-icon icon="spinner" pulse /> Searching of an opponent...
+			<font-awesome-icon icon="spinner" pulse /> Searching for an opponent...
 			<button @click="cancelQueue">Cancel</button>
 		</div>
 		<div>
